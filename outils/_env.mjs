@@ -7,7 +7,8 @@ export function lireEnv(chemin = ".env.local") {
   const fichier = path.resolve(chemin);
   if (!fs.existsSync(fichier)) {
     throw new ErreurKit(
-      `Fichier introuvable : ${chemin}. Copiez .env.example en .env.local, puis collez-y vos valeurs.`,
+      `Fichier introuvable : ${chemin}. Copiez .env.example en .env.local : seuls les deux jetons ` +
+        "(Supabase, Vercel) y sont collés à la main, le reste est rempli par les outils.",
     );
   }
   const env = {};
