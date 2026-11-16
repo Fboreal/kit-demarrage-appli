@@ -88,3 +88,9 @@ Aucune commande à retenir. Écrivez à Claude ce que vous voulez, comme à un c
 Le kit applique automatiquement une méthode de travail éprouvée (une demande de modification par
 évolution, base de données versionnée, contrôles avant chaque mise en ligne, journal des évolutions).
 Tout est décrit dans `.claude/rules/` et `docs/` — vous n'avez pas besoin de le lire pour démarrer.
+
+## Licence
+
+Kit distribué sous **licence MIT** (fichier `LICENSE`) : vous pouvez l'utiliser librement, y compris pour
+une application commerciale, le modifier et le partager, en conservant la mention de licence. Il est
+fourni tel quel, sans garantie. **L'application que vous créez avec lui vous appartient.**

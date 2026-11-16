@@ -12,6 +12,9 @@ Féliciter brièvement, puis résumer en langage simple :
   application vierge en ligne (<date>) ».
 - `README.md` : remplacer le guide du kit par une courte présentation de **l'application** (nom, phrase,
   adresse en ligne, renvoi à `docs/`) — c'est la page d'accueil du dépôt sur GitHub.
+- `LICENSE` (licence MIT **du kit**) : le déplacer en `.claude/kit/LICENCE-KIT.txt` (la mention doit
+  être conservée avec les fichiers du kit) ; l'application, elle, appartient à l'utilisateur, sans
+  licence publique par défaut. Lui dire en une phrase, sans l'inquiéter.
 - `docs/HISTORIQUE.md` : vérifier l'entrée `[Démarrage]`.
 - `docs/INFRA.md` : complet (dépôt, projet Supabase et région, domaine Vercel et offre, réglages
   d'authentification) — **aucune** clé.
