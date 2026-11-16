@@ -1,0 +1,34 @@
+# Dépendances
+/node_modules
+/.pnp
+.pnp.*
+
+# Next.js
+/.next/
+/out/
+/build
+*.tsbuildinfo
+next-env.d.ts
+
+# Secrets — NE JAMAIS COMMITER (le modèle sans valeur, lui, est versionné)
+.env
+.env*
+!.env.example
+
+# État du démarrage guidé (propre à chaque poste)
+/.kit/
+
+# Supabase (fichiers locaux de la CLI)
+/supabase/.branches
+/supabase/.temp
+/supabase/.env
+
+# Vercel
+.vercel
+
+# Divers
+.DS_Store
+Thumbs.db
+*.pem
+*.log
+npm-debug.log*

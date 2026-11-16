@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit-Appli — Maquette de référence (PC et mobile)</title>
+<!--
+  MAQUETTE DE RÉFÉRENCE DU KIT-APPLI
+  Ce fichier N'EST PAS l'application. C'est le modèle visuel que Claude reproduit dans chaque
+  application créée avec le kit (règles : .claude/rules/60-interface.md ; jetons et dimensions :
+  .claude/kit/interface/charte.md). Données entièrement fictives.
+  Ouvrez-le dans un navigateur : bascule PC / mobile, écrans types, réglage des deux couleurs.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   1. JETONS DE LA CHARTE — valeurs par défaut (charte de référence)
+   Tout le thème dérive de DEUX couleurs : --primaire et l'accent (dégradé
+   --accent-1 → --accent-2). Les autres teintes en sont déduites.
+   ===================================================================== */
+:root {
+  --primaire: #3e4c8a;
+  --primaire-fonce: #333f73;
+  --primaire-moyen: #5e70b8;
+  --primaire-doux: #93a6de;
+  --primaire-wash: #e4e9fb;
+  --accent-1: #ff9a76;
+  --accent-2: #ff6f91;
+  --accent-ombre: rgba(255, 111, 145, .35);
+  --ombre-carte: rgba(62, 76, 138, .10);
+  --ombre-menu: rgba(62, 76, 138, .16);
+
+  --succes: #7fd9c4;      /* turquoise : accents de succès */
+  --succes-texte: #1f8a6e;
+  --succes-wash: #e3f8f3;
+  --danger-texte: #c1443a;
+  --danger-wash: #fdeae8;
+  --danger-bord: #f6cac5;
+  --alerte-texte: #8a6a1f;
+  --alerte-wash: #fdf8ec;
+  --alerte-bord: #f0ddb0;
+
+  --fond: #eef0fa;        /* fond général (canvas) */
+  --panneau: #f7f8fc;     /* barres, zones secondaires */
+  --barre-laterale: #fbfcfe;
+  --ligne: #eceef7;       /* bordures et séparateurs */
+  --champ-bord: #e2e5f2;
+  --encre: #1b2036;
+  --encre-douce: #4b5468;
+  --sourdine: #8890a6;
+  --texte-tableau: #5a6178;
+  --entete-tableau: #7a8299;
+
+  --police-interface: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --police-marque: "Fredoka", "Plus Jakarta Sans", ui-sans-serif, sans-serif;
+
+  --rayon-champ: 10px;
+  --rayon-bouton: 12px;
+  --rayon-carte: 16px;
+}
+
+/* =====================================================================
+   2. L'ATELIER (autour de la maquette — ne fait pas partie de l'appli)
+   ===================================================================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body.atelier {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #2b2f3a;
+  color: #e9ebf2;
+  min-height: 100vh;
+}
+.atelier-barre {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px;
+  padding: 10px 18px; background: #20232c; border-bottom: 1px solid #3a3f4d;
+  font-size: 13px;
+}
+.atelier-barre strong { font-size: 14px; color: #fff; }
+.atelier-groupe { display: flex; align-items: center; gap: 6px; }
+.atelier-groupe span { color: #a9afc2; }
+.atelier-barre button, .atelier-barre select {
+  font: inherit; color: #e9ebf2; background: #2f3442; border: 1px solid #454b5c;
+  border-radius: 8px; padding: 5px 10px; cursor: pointer;
+}
+.atelier-barre button[aria-pressed="true"] { background: #e9ebf2; color: #20232c; border-color: #e9ebf2; }
+.atelier-barre input[type="color"] { width: 30px; height: 26px; padding: 0; border: 1px solid #454b5c; border-radius: 6px; background: none; cursor: pointer; }
+.atelier-note { width: 100%; color: #a9afc2; font-size: 12px; }
+.scene { display: flex; justify-content: center; padding: 26px 18px 60px; overflow-x: auto; }
+.ecran {
+  width: 1280px; height: 800px; flex: none;
+  border-radius: 14px; overflow: hidden; background: var(--fond);
+  box-shadow: 0 30px 80px rgba(0,0,0,.45);
+}
+.ecran.mobile { width: 390px; height: 844px; border-radius: 44px; border: 12px solid #11131a; }
+
+/* =====================================================================
+   3. L'APPLICATION
+   Les règles « PC / mobile » utilisent des requêtes de conteneur pour que la
+   bascule fonctionne dans cette maquette ; dans l'appli réelle, ce sont les
+   points de rupture Tailwind équivalents : md = 768 px, lg = 1024 px.
+   ===================================================================== */
+.appli {
+  container-type: inline-size; container-name: appli;
+  position: relative; display: flex; flex-direction: column;
+  width: 100%; height: 100%; overflow: hidden;
+  font-family: var(--police-interface); color: var(--encre);
+  background: var(--panneau); -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+}
+.appli button, .appli input, .appli select, .appli textarea { font-family: inherit; }
+svg.ico { width: 18px; height: 18px; flex: none; }
+
+/* ---------- En-tête (64 px, blanc) ---------- */
+.entete {
+  position: relative; z-index: 30; flex: none;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  height: 64px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--ligne);
+}
+.entete-gauche, .entete-droite { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.entete-gauche { flex: 1 1 auto; }
+.entete-droite { flex: none; }
+.bouton-menu { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; border: 0; border-radius: 10px; background: none; color: #3a4055; cursor: pointer; }
+.bouton-menu:hover { background: var(--panneau); }
+.logo { font-family: var(--police-marque); font-size: 23px; letter-spacing: -.01em; white-space: nowrap; cursor: pointer; }
+.logo .l1 { font-weight: 700; color: var(--primaire); }
+.logo .l2 { font-weight: 600; background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.separateur-v { width: 1px; height: 24px; background: var(--ligne); }
+.icone-entete { position: relative; width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; color: #3a4055; cursor: pointer; }
+.icone-entete:hover { background: var(--panneau); }
+.pastille-compte { position: absolute; top: 6px; right: 6px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.profil { display: flex; align-items: center; gap: 10px; padding: 6px 10px 6px 6px; border-radius: 12px; cursor: pointer; }
+.profil:hover { background: var(--panneau); }
+.avatar { width: 34px; height: 34px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); color: #fff; font-weight: 700; font-size: 13px; flex: none; }
+.profil-texte { display: flex; flex-direction: column; line-height: 1.2; }
+.profil-texte b { font-size: 13px; color: var(--encre); }
+.profil-texte small { font-size: 11px; color: var(--sourdine); }
+
+/* ---------- Corps : barre latérale + contenu (seul <main> défile) ---------- */
+.corps { display: flex; flex: 1; min-height: 0; }
+.laterale {
+  width: 280px; flex: none; overflow-y: auto; padding: 16px;
+  display: flex; flex-direction: column; gap: 2px;
+  background: var(--barre-laterale); border-right: 1px solid var(--ligne);
+}
+.section-titre { padding: 0 14px 4px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #bec3d6; }
+.trait { height: 1px; margin: 10px 14px; background: var(--ligne); }
+.entree {
+  position: relative; display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; border-radius: 12px; border: 0; background: none; width: 100%;
+  font-size: 14px; font-weight: 600; color: var(--encre-douce); cursor: pointer; text-align: left;
+}
+.entree:hover { background: #f4f6fc; }
+.entree.active { background: var(--primaire-wash); color: var(--primaire); }
+.entree.active::before { content: ""; position: absolute; left: -14px; top: 50%; width: 4px; height: 20px; transform: translateY(-50%); border-radius: 999px; background: linear-gradient(180deg, var(--accent-1), var(--accent-2)); }
+.entree .chevron { margin-left: auto; transition: transform .15s; }
+.groupe.ferme .chevron { transform: rotate(-90deg); }
+.groupe.ouvert-actif > .entree { color: var(--primaire); }
+.sous-entrees { margin-left: 18px; padding-left: 12px; border-left: 1px solid var(--ligne); display: flex; flex-direction: column; gap: 2px; }
+.groupe.ferme .sous-entrees { display: none; }
+.sous-entree { display: flex; align-items: center; gap: 10px; padding: 6px 12px; border-radius: 8px; border: 0; background: none; width: 100%; text-align: left; font-size: 12.5px; font-weight: 500; color: var(--sourdine); cursor: pointer; }
+.sous-entree:hover { background: #f4f6fc; color: var(--encre-douce); }
+.sous-entree.active { background: var(--primaire-wash); color: var(--primaire); font-weight: 600; }
+.sous-entree svg.ico { width: 15px; height: 15px; }
+
+.contenu { flex: 1; min-width: 0; overflow-y: auto; overflow-x: hidden; background: var(--panneau); }
+.page { display: flex; flex-direction: column; gap: 20px; padding: 32px; }
+
+/* ---------- Tiroir mobile ---------- */
+.voile { position: absolute; inset: 0; z-index: 40; background: rgba(0,0,0,.4); opacity: 0; pointer-events: none; transition: opacity .2s; }
+.tiroir { position: absolute; top: 0; bottom: 0; left: 0; z-index: 50; width: 280px; max-width: 85%; transform: translateX(-100%); transition: transform .2s; box-shadow: 0 8px 40px rgba(20,28,60,.28); }
+.tiroir .laterale { width: 100%; height: 100%; border-right: 0; }
+.appli.tiroir-ouvert .voile { opacity: 1; pointer-events: auto; }
+.appli.tiroir-ouvert .tiroir { transform: translateX(0); }
+
+/* ---------- En-tête de page ---------- */
+.ariane { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--sourdine); }
+.ariane b { font-weight: 600; color: var(--primaire); }
+.titre-ligne { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.titre-bloc { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.titre-avec-retour { display: flex; align-items: center; gap: 8px; }
+h1.titre { margin: 0; font-size: 26px; font-weight: 800; color: var(--encre); letter-spacing: -.01em; }
+.sous-titre { font-size: 13px; color: var(--sourdine); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.fleche-retour { width: 36px; height: 36px; flex: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; border: 1.5px solid #d8def5; background: #fff; color: var(--primaire); cursor: pointer; }
+.fleche-retour:hover { background: #f3f5fd; }
+
+/* ---------- Boutons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: var(--rayon-bouton); font-size: 14px; cursor: pointer; transition: transform .12s, box-shadow .12s, background .12s; white-space: nowrap; }
+.btn-principal { border: 0; padding: 10px 20px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); box-shadow: 0 4px 14px var(--accent-ombre); }
+.btn-principal:hover { transform: translateY(-1px); box-shadow: 0 6px 18px var(--accent-ombre); }
+.btn-secondaire { padding: 9px 16px; font-weight: 600; color: var(--primaire); background: #fff; border: 1.5px solid #d8def5; }
+.btn-secondaire:hover { background: #f3f5fd; }
+.btn-discret { padding: 9px 14px; font-weight: 600; color: var(--encre-douce); background: none; border: 0; }
+.btn-discret:hover { background: #f1f3fa; }
+.btn-danger { padding: 9px 16px; font-weight: 600; color: var(--danger-texte); background: #fff; border: 1.5px solid var(--danger-bord); }
+.btn-danger:hover { background: var(--danger-wash); }
+.btn[disabled] { opacity: .5; transform: none; box-shadow: none; cursor: not-allowed; }
+
+/* ---------- Cartes, badges, champs ---------- */
+.carte { background: #fff; border: 1px solid var(--ligne); border-radius: var(--rayon-carte); }
+.carte-pad { padding: 20px; }
+.carte-titre { margin: 0 0 4px; font-size: 15px; font-weight: 700; color: var(--encre); }
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+.b-dispo { background: var(--succes-wash); color: var(--succes-texte); }
+.b-pret { background: var(--primaire-wash); color: var(--primaire); }
+.b-repa { background: var(--alerte-wash); color: var(--alerte-texte); }
+.b-inactif { background: var(--danger-wash); color: var(--danger-texte); }
+.champ { display: flex; flex-direction: column; gap: 6px; }
+.champ label { font-size: 12.5px; font-weight: 600; color: var(--encre-douce); }
+.saisie {
+  width: 100%; padding: 9px 12px; border-radius: var(--rayon-champ); border: 1.5px solid var(--champ-bord);
+  background: #fff; color: var(--encre); font-size: 13.5px; outline: none; transition: border-color .12s, box-shadow .12s;
+}
+.saisie:focus { border-color: var(--primaire); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primaire) 15%, transparent); }
+.saisie.erreur { border-color: var(--danger-texte); }
+.aide-erreur { font-size: 12px; color: var(--danger-texte); }
+textarea.saisie { min-height: 88px; resize: vertical; }
+.lecture-seule { background: var(--panneau); color: var(--texte-tableau); font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
+
+/* ---------- Barre d'outils collante ---------- */
+.barre-outils {
+  position: sticky; top: 0; z-index: 20;
+  margin: 0 -32px; padding: 10px 32px; background: var(--panneau); border-bottom: 1px solid var(--ligne);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+}
+.recherche { position: relative; flex: 1 1 260px; min-width: 200px; }
+.recherche svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--sourdine); width: 16px; height: 16px; }
+.recherche input { padding-left: 36px; border-radius: 12px; }
+.segments { display: inline-flex; padding: 3px; gap: 2px; background: #fff; border: 1.5px solid var(--champ-bord); border-radius: 12px; }
+.segments button { border: 0; background: none; padding: 6px 12px; border-radius: 9px; font-size: 12.5px; font-weight: 600; color: var(--encre-douce); cursor: pointer; }
+.segments button.actif { background: var(--primaire-wash); color: var(--primaire); }
+.compteur { margin-left: auto; font-size: 12.5px; color: var(--sourdine); white-space: nowrap; }
+
+/* ---------- Tableau (PC) ---------- */
+.tableau { overflow-x: clip; }
+.ligne-grille { display: grid; grid-template-columns: 76px 120px minmax(220px, 1fr) 130px 80px 150px; align-items: center; }
+.tableau-entete {
+  position: sticky; top: var(--barre-h, 57px); z-index: 10;
+  background: #fafbfe; border-bottom: 1px solid var(--ligne); border-radius: var(--rayon-carte) var(--rayon-carte) 0 0;
+}
+.tableau-entete > div { padding: 12px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--entete-tableau); }
+.tri { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; }
+.tri .chevrons { display: inline-flex; flex-direction: column; line-height: 0; opacity: .45; }
+.tri.actif { color: var(--primaire); }
+.tri.actif .chevrons { opacity: 1; }
+.ligne-donnee { border-bottom: 1px solid var(--ligne); cursor: pointer; transition: background .1s; }
+.ligne-donnee:last-child { border-bottom: 0; }
+.ligne-donnee:hover { background: #f8f9fe; }
+.ligne-donnee > div { padding: 12px 16px; font-size: 13px; color: var(--texte-tableau); }
+.cellule-code { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; color: var(--entete-tableau) !important; }
+.cellule-nom b { display: block; font-size: 13.5px; font-weight: 600; color: #2a3142; }
+.cellule-nom small { font-size: 12px; color: var(--sourdine); }
+.cellule-qte { text-align: right; font-weight: 700; color: var(--encre) !important; font-variant-numeric: tabular-nums; }
+.vignette {
+  width: 44px; height: 44px; border-radius: 12px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--primaire-wash), color-mix(in srgb, var(--primaire-doux) 55%, white));
+  color: var(--primaire); font-weight: 700; font-size: 13px;
+}
+.cartes-mobiles { display: none; flex-direction: column; gap: 10px; }
+.carte-ligne { display: flex; gap: 12px; padding: 12px; cursor: pointer; }
+.carte-ligne:active { background: #f8f9fe; }
+.carte-ligne .vignette { width: 56px; height: 56px; }
+.carte-ligne-texte { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+.carte-ligne-texte b { font-size: 14px; font-weight: 600; color: #2a3142; }
+.carte-ligne-texte small { font-size: 12px; color: var(--sourdine); }
+.carte-ligne-texte .refs { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--sourdine); }
+.tri-mobile { display: none; align-items: center; gap: 8px; font-size: 12.5px; color: var(--encre-douce); }
+.tri-mobile select { width: auto; padding: 6px 10px; }
+
+/* ---------- Fiche : onglets, formulaire, photo ---------- */
+.onglets { display: flex; gap: 4px; border-bottom: 1px solid var(--ligne); }
+.onglets button { border: 0; background: none; padding: 10px 14px; font-size: 13.5px; font-weight: 600; color: var(--sourdine); cursor: pointer; border-bottom: 2.5px solid transparent; margin-bottom: -1px; }
+.onglets button.actif { color: var(--primaire); border-bottom-color: var(--primaire); }
+.grille-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grille-form .large { grid-column: 1 / -1; }
+.zone-photo { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 160px; border: 2px dashed #d8def5; border-radius: var(--rayon-carte); background: var(--panneau); color: var(--sourdine); font-size: 13px; text-align: center; padding: 16px; }
+.pied-form { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; padding-top: 4px; }
+.fiche-grille { display: grid; grid-template-columns: 280px 1fr; gap: 20px; align-items: start; }
+
+/* ---------- Alertes ---------- */
+.alerte { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; font-size: 13px; border: 1px solid; }
+.alerte-succes { background: var(--succes-wash); color: var(--succes-texte); border-color: color-mix(in srgb, var(--succes) 60%, white); }
+.alerte-attention { background: var(--alerte-wash); color: var(--alerte-texte); border-color: var(--alerte-bord); }
+.alerte-erreur { background: var(--danger-wash); color: var(--danger-texte); border-color: var(--danger-bord); }
+
+/* ---------- États : vide, chargement, erreur ---------- */
+.etat-vide { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 40px 20px; text-align: center; }
+.etat-vide .rond { width: 56px; height: 56px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: var(--primaire-wash); color: var(--primaire); }
+.etat-vide b { font-size: 14px; color: var(--encre); }
+.etat-vide span { max-width: 340px; font-size: 13px; color: var(--sourdine); }
+.squelette { border-radius: 8px; background: linear-gradient(90deg, #e4e7f2 0%, #f1f3fa 50%, #e4e7f2 100%); background-size: 440px 100%; animation: reflet 1.3s linear infinite; }
+@keyframes reflet { 0% { background-position: -220px 0; } 100% { background-position: 220px 0; } }
+
+/* ---------- Accueil ---------- */
+.indicateurs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.indicateur { display: flex; align-items: center; gap: 14px; padding: 18px; }
+.indicateur .rond { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: var(--primaire-wash); color: var(--primaire); flex: none; }
+.indicateur b { display: block; font-size: 22px; font-weight: 800; color: var(--encre); }
+.indicateur small { font-size: 12.5px; color: var(--sourdine); }
+.une { display: grid; grid-template-columns: 180px 1fr; gap: 24px; padding: 24px; background: linear-gradient(135deg, #fff, var(--panneau)); }
+.une-image { height: 150px; border-radius: 14px; background: linear-gradient(135deg, var(--primaire-moyen), var(--primaire)); display: flex; align-items: center; justify-content: center; color: #fff; font-family: var(--police-marque); font-size: 30px; font-weight: 700; }
+.etiquette { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: #fff; border: 1px solid var(--ligne); font-size: 11px; font-weight: 800; letter-spacing: .04em; color: var(--encre); text-transform: uppercase; }
+.etiquette::before { content: ""; width: 7px; height: 7px; border-radius: 999px; background: var(--accent-2); }
+
+/* ---------- Composants (feuille) ---------- */
+.feuille { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.rangee { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.nuancier { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.teinte { border: 1px solid var(--ligne); border-radius: 12px; overflow: hidden; font-size: 11.5px; }
+.teinte i { display: block; height: 42px; }
+.teinte span { display: block; padding: 6px 8px; color: var(--encre-douce); }
+.teinte code { color: var(--sourdine); font-size: 10.5px; }
+
+/* ---------- Modale ---------- */
+.modale-fond { position: absolute; inset: 0; z-index: 60; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(27,32,54,.45); }
+.modale-fond.ouverte { display: flex; }
+.modale { width: 100%; max-width: 440px; padding: 22px; background: #fff; border-radius: 18px; box-shadow: 0 20px 60px rgba(20,28,60,.3); }
+.modale h3 { margin: 0 0 6px; font-size: 17px; font-weight: 800; }
+.modale p { margin: 0 0 18px; font-size: 13.5px; color: var(--encre-douce); line-height: 1.5; }
+
+section[data-vue] { display: none; }
+section[data-vue].visible { display: flex; }
+
+/* =====================================================================
+   4. ADAPTATION MOBILE (PC ≥ 1024 px ; tablette 768–1023 ; mobile < 768)
+   ===================================================================== */
+@container appli (max-width: 1023px) {
+  .corps > .laterale { display: none; }
+  .bouton-menu { display: inline-flex; }
+  .entete { padding: 0 16px; }
+  .page { padding: 16px; }
+  .barre-outils { margin: 0 -16px; padding: 10px 16px; }
+  .fiche-grille { grid-template-columns: 1fr; }
+}
+@container appli (max-width: 767px) {
+  .tableau { display: none; }
+  .cartes-mobiles { display: flex; }
+  .tri-mobile { display: flex; }
+  .profil-texte, .separateur-v, .entete .masquer-mobile { display: none; }
+  .entete .icone-entete { width: 36px; }
+  .logo { font-size: 20px; }
+  .entete-gauche, .entete-droite { gap: 6px; }
+  .indicateurs, .feuille { grid-template-columns: 1fr; }
+  .une { grid-template-columns: 1fr; padding: 18px; }
+  .grille-form { grid-template-columns: 1fr; }
+  h1.titre { font-size: 22px; }
+  .compteur { margin-left: 0; }
+  /* Écran tactile : jamais de police < 16 px dans un champ (sinon iOS zoome). */
+  .saisie { font-size: 16px; }
+}
+</style>
+</head>
+<body class="atelier">
+
+<div class="atelier-barre">
+  <strong>Kit-Appli · Maquette de référence</strong>
+  <div class="atelier-groupe" role="group" aria-label="Format">
+    <span>Format</span>
+    <button type="button" data-format="pc" aria-pressed="true">PC 1 280 px</button>
+    <button type="button" data-format="mobile" aria-pressed="false">Mobile 390 px</button>
+  </div>
+  <div class="atelier-groupe">
+    <span>Écran</span>
+    <select id="choix-ecran" aria-label="Écran affiché">
+      <option value="accueil">Accueil</option>
+      <option value="liste" selected>Liste (tableau / cartes)</option>
+      <option value="fiche">Fiche (formulaire)</option>
+      <option value="composants">Composants et états</option>
+    </select>
+  </div>
+  <div class="atelier-groupe">
+    <span>Couleur principale</span><input type="color" id="c-primaire" value="#3e4c8a" aria-label="Couleur principale">
+    <span>Accent</span><input type="color" id="c-accent1" value="#ff9a76" aria-label="Début de l'accent"><input type="color" id="c-accent2" value="#ff6f91" aria-label="Fin de l'accent">
+    <button type="button" id="reinit">Couleurs par défaut</button>
+  </div>
+  <div class="atelier-note">Ce fichier n'est pas l'application : c'est le modèle de STYLE que Claude reproduit. Les menus et écrans affichés sont des exemples fictifs ; une application créée avec le kit démarre vierge, et ses menus n'existent que lorsque l'utilisateur les demande. Changez les deux couleurs pour prévisualiser une personnalisation : tout le reste du thème en découle.</div>
+</div>
+
+<div class="scene">
+<div class="ecran" id="ecran">
+<div class="appli" id="appli">
+
+  <!-- ================= EN-TÊTE ================= -->
+  <header class="entete">
+    <div class="entete-gauche">
+      <button class="bouton-menu" type="button" id="ouvrir-tiroir" aria-label="Ouvrir le menu">
+        <svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <span class="logo" data-aller="accueil" aria-label="Accueil"><span class="l1">Matério</span><span class="l2">thèque</span></span>
+    </div>
+    <div class="entete-droite">
+      <span class="icone-entete masquer-mobile" title="Aide"><svg class="ico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M9.6 9.5a2.5 2.5 0 1 1 3.3 2.4c-.6.2-.9.7-.9 1.3v.3M12 16.6v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+      <span class="icone-entete" title="Notifications"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15L6 16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 20a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.8"/></svg><span class="pastille-compte">3</span></span>
+      <span class="separateur-v"></span>
+      <div class="profil" title="Menu du compte">
+        <span class="avatar">CM</span>
+        <span class="profil-texte"><b>Camille Martin</b><small>Gestionnaire</small></span>
+        <svg class="masquer-mobile" viewBox="0 0 24 24" width="14" height="14" fill="none" style="color:#adb3c9"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="corps">
+    <!-- ================= BARRE LATÉRALE (PC) ================= -->
+    <nav class="laterale" aria-label="Navigation principale" data-modele-navigation></nav>
+
+    <!-- ================= CONTENU (seule zone qui défile) ================= -->
+    <main class="contenu" id="contenu">
+
+      <!-- ---------- ACCUEIL ---------- -->
+      <section class="page" data-vue="accueil">
+        <div class="titre-ligne">
+          <div class="titre-bloc">
+            <h1 class="titre">Bonjour Camille</h1>
+            <span class="sous-titre">Bienvenue sur Matériothèque — l'essentiel du moment.</span>
+          </div>
+        </div>
+        <div class="indicateurs">
+          <div class="carte indicateur"><span class="rond"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M4 8l8-4 8 4v8l-8 4-8-4V8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><div><b>142</b><small>éléments au parc</small></div></div>
+          <div class="carte indicateur"><span class="rond"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M7 4h10v16H7z" stroke="currentColor" stroke-width="1.7"/><path d="M10 9h4M10 13h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><div><b>18</b><small>prêts en cours</small></div></div>
+          <div class="carte indicateur"><span class="rond"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M12 8v5l3 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.7"/></svg></span><div><b>4</b><small>retours en retard</small></div></div>
+        </div>
+        <div class="carte une">
+          <div class="une-image">M</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span><span class="etiquette">À la une</span></span>
+            <h2 style="margin:0;font-family:var(--police-marque);font-size:22px;font-weight:700;color:var(--encre)">Nouveau : la réservation en ligne</h2>
+            <span class="sous-titre">12 novembre 2026</span>
+            <p style="margin:0;font-size:14px;line-height:1.6;color:var(--encre-douce)">Réservez un matériel pour une date précise depuis sa fiche. Le gestionnaire est prévenu et le matériel est mis de côté.</p>
+            <div class="actions"><button class="btn btn-principal" type="button" data-aller="liste">Voir le matériel</button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- LISTE ---------- -->
+      <section class="page" data-vue="liste">
+        <div class="ariane">Matériel <svg viewBox="0 0 24 24" width="11" height="11" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <b>Inventaire</b></div>
+        <div class="titre-ligne">
+          <div class="titre-bloc">
+            <h1 class="titre">Inventaire du matériel</h1>
+            <span class="sous-titre">142 éléments</span>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondaire" type="button"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>Exporter</button>
+            <button class="btn btn-principal" type="button" data-aller="fiche"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Nouvel élément</button>
+          </div>
+        </div>
+
+        <div class="barre-outils" id="barre-outils">
+          <div class="recherche">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input class="saisie" type="search" id="recherche" placeholder="Rechercher par code ou désignation…" aria-label="Rechercher">
+          </div>
+          <select class="saisie" style="width:auto" aria-label="Catégorie"><option>Toutes catégories</option><option>Électroportatif</option><option>Accès en hauteur</option><option>Mesure</option></select>
+          <div class="segments" role="group" aria-label="Statut"><button type="button" class="actif" data-statut="tous">Tous</button><button type="button" data-statut="dispo">Disponibles</button><button type="button" data-statut="pret">Prêtés</button></div>
+          <span class="compteur" id="compteur"></span>
+        </div>
+
+        <!-- Tableau (≥ 768 px) -->
+        <div class="carte tableau">
+          <div class="ligne-grille tableau-entete" id="entete-tableau">
+            <div></div>
+            <div><span class="tri" data-tri="code">Code<span class="chevrons"></span></span></div>
+            <div><span class="tri" data-tri="nom">Désignation<span class="chevrons"></span></span></div>
+            <div><span class="tri" data-tri="empl">Emplacement<span class="chevrons"></span></span></div>
+            <div style="text-align:right"><span class="tri" data-tri="qte">Qté<span class="chevrons"></span></span></div>
+            <div><span class="tri" data-tri="statut">Statut<span class="chevrons"></span></span></div>
+          </div>
+          <div id="lignes"></div>
+        </div>
+
+        <!-- Cartes (< 768 px) -->
+        <div class="tri-mobile"><span>Trier par</span>
+          <select class="saisie" id="tri-mobile" aria-label="Trier par"><option value="nom">Désignation</option><option value="code">Code</option><option value="qte">Quantité</option><option value="statut">Statut</option></select>
+        </div>
+        <div class="cartes-mobiles" id="cartes"></div>
+      </section>
+
+      <!-- ---------- FICHE ---------- -->
+      <section class="page" data-vue="fiche">
+        <div class="ariane">Matériel <svg viewBox="0 0 24 24" width="11" height="11" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Inventaire <svg viewBox="0 0 24 24" width="11" height="11" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <b>MAT-0012</b></div>
+        <div class="titre-ligne">
+          <div class="titre-avec-retour">
+            <button class="fleche-retour" type="button" data-aller="liste" aria-label="Retour à la liste"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="titre-bloc"><h1 class="titre">Perceuse à percussion 18 V</h1><span class="sous-titre">Modifiée le 12/11/2026 par Camille Martin</span></div>
+          </div>
+          <div class="actions"><button class="btn btn-danger" type="button" data-modale>Supprimer</button></div>
+        </div>
+        <div class="alerte alerte-succes"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4 10-10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifications enregistrées.</div>
+        <div class="onglets" role="tablist"><button class="actif" type="button">Général</button><button type="button">Stock</button><button type="button">Historique</button></div>
+        <div class="fiche-grille">
+          <div class="carte carte-pad" style="display:flex;flex-direction:column;gap:12px">
+            <div class="zone-photo"><svg class="ico" viewBox="0 0 24 24" fill="none" style="width:28px;height:28px"><path d="M4 8h3l2-3h6l2 3h3v11H4V8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" stroke="currentColor" stroke-width="1.7"/></svg>Prendre une photo<br><small>ou glisser une image (JPEG, PNG, WebP, HEIC — 5 Mo max)</small></div>
+            <span class="badge b-dispo" style="align-self:flex-start">Disponible</span>
+          </div>
+          <form class="carte carte-pad" style="display:flex;flex-direction:column;gap:16px" onsubmit="return false">
+            <div class="grille-form">
+              <div class="champ"><label>Code</label><input class="saisie lecture-seule" value="MAT-0012" readonly></div>
+              <div class="champ"><label>Catégorie</label><select class="saisie"><option>Électroportatif</option><option>Accès en hauteur</option></select></div>
+              <div class="champ large"><label>Désignation</label><input class="saisie" value="Perceuse à percussion 18 V"></div>
+              <div class="champ"><label>Emplacement</label><input class="saisie" value="Allée B · niveau 2"></div>
+              <div class="champ"><label>Quantité</label><input class="saisie erreur" value="-2" inputmode="decimal"><span class="aide-erreur">La quantité doit être positive.</span></div>
+              <div class="champ large"><label>Description</label><textarea class="saisie">Livrée avec 2 batteries et un chargeur rapide.</textarea></div>
+            </div>
+            <div class="pied-form"><button class="btn btn-discret" type="button" data-aller="liste">Annuler</button><button class="btn btn-principal" type="button">Enregistrer</button></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ---------- COMPOSANTS ET ÉTATS ---------- -->
+      <section class="page" data-vue="composants">
+        <div class="titre-bloc"><h1 class="titre">Composants et états</h1><span class="sous-titre">Les briques communes à tous les écrans.</span></div>
+        <div class="feuille">
+          <div class="carte carte-pad" style="display:flex;flex-direction:column;gap:12px">
+            <h3 class="carte-titre">Boutons</h3>
+            <div class="rangee"><button class="btn btn-principal" type="button">Action principale</button><button class="btn btn-secondaire" type="button">Secondaire</button></div>
+            <div class="rangee"><button class="btn btn-discret" type="button">Discret</button><button class="btn btn-danger" type="button">Supprimer</button><button class="btn btn-principal" type="button" disabled>Désactivé</button></div>
+            <span class="sous-titre">Un seul bouton principal (dégradé) par écran ; « Supprimer » toujours confirmé.</span>
+          </div>
+          <div class="carte carte-pad" style="display:flex;flex-direction:column;gap:12px">
+            <h3 class="carte-titre">Pastilles de statut</h3>
+            <div class="rangee"><span class="badge b-dispo">Disponible</span><span class="badge b-pret">Prêté</span><span class="badge b-repa">En réparation</span><span class="badge b-inactif">Inactif</span></div>
+            <span class="sous-titre">Même code couleur partout dans l'application.</span>
+          </div>
+          <div class="carte carte-pad" style="display:flex;flex-direction:column;gap:12px">
+            <h3 class="carte-titre">Champs</h3>
+            <div class="champ"><label>Champ normal</label><input class="saisie" placeholder="Saisir…"></div>
+            <div class="champ"><label>Champ en erreur</label><input class="saisie erreur" value="abc"><span class="aide-erreur">Message d'erreur précis et utile.</span></div>
+          </div>
+          <div class="carte carte-pad" style="display:flex;flex-direction:column;gap:10px">
+            <h3 class="carte-titre">Alertes</h3>
+            <div class="alerte alerte-succes">Enregistré avec succès.</div>
+            <div class="alerte alerte-attention">Les résultats utilisent d'anciens paramètres.</div>
+            <div class="alerte alerte-erreur">Enregistrement impossible : vérifiez la quantité.</div>
+          </div>
+          <div class="carte">
+            <div class="etat-vide">
+              <span class="rond"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M4 8l8-4 8 4v8l-8 4-8-4V8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
+              <b>Aucun élément pour le moment</b>
+              <span>Ajoutez votre premier matériel : il apparaîtra ici, pour toute l'équipe.</span>
+              <button class="btn btn-principal" type="button" style="margin-top:6px">Ajouter un élément</button>
+            </div>
+          </div>
+          <div class="carte carte-pad" style="display:flex;flex-direction:column;gap:12px" aria-label="Chargement">
+            <h3 class="carte-titre">Chargement (reflet animé)</h3>
+            <div class="squelette" style="height:12px;width:40%"></div>
+            <div class="squelette" style="height:28px;width:70%"></div>
+            <div class="squelette" style="height:12px;width:90%"></div>
+            <div class="squelette" style="height:12px;width:60%"></div>
+          </div>
+          <div class="carte carte-pad" style="display:flex;flex-direction:column;gap:12px">
+            <h3 class="carte-titre">Erreur d'écran</h3>
+            <div class="alerte alerte-erreur" style="flex-direction:column">
+              <b>Cette page n'a pas pu s'afficher.</b>
+              <span>La connexion a peut-être été interrompue. Vos données ne sont pas perdues.</span>
+              <button class="btn btn-secondaire" type="button" style="align-self:flex-start">Réessayer</button>
+            </div>
+          </div>
+          <div class="carte carte-pad" style="display:flex;flex-direction:column;gap:12px">
+            <h3 class="carte-titre">Fenêtre de confirmation</h3>
+            <span class="sous-titre">Pour toute action irréversible.</span>
+            <div><button class="btn btn-secondaire" type="button" data-modale>Ouvrir l'exemple</button></div>
+          </div>
+        </div>
+        <div class="carte carte-pad" style="display:flex;flex-direction:column;gap:12px">
+          <h3 class="carte-titre">Nuancier (calculé à partir des deux couleurs)</h3>
+          <div class="nuancier" id="nuancier"></div>
+        </div>
+      </section>
+
+      <!-- ---------- ÉCRAN À VENIR ---------- -->
+      <section class="page" data-vue="bientot">
+        <div class="titre-bloc"><h1 class="titre" id="titre-bientot">Écran à venir</h1><span class="sous-titre">Cet écran sera construit lors d'une prochaine évolution.</span></div>
+        <div class="carte"><div class="etat-vide"><span class="rond"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/></svg></span><b>Bientôt disponible</b><span>Les écrans prévus sont listés dans la feuille de route du projet.</span></div></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ================= TIROIR MOBILE ================= -->
+  <div class="voile" id="voile"></div>
+  <div class="tiroir" aria-label="Menu"><nav class="laterale" data-modele-navigation></nav></div>
+
+  <!-- ================= MODALE ================= -->
+  <div class="modale-fond" id="modale" role="dialog" aria-modal="true" aria-labelledby="modale-titre">
+    <div class="modale">
+      <h3 id="modale-titre">Supprimer cet élément ?</h3>
+      <p>« Perceuse à percussion 18 V » sera supprimée définitivement. Cette action ne peut pas être annulée.</p>
+      <div class="pied-form"><button class="btn btn-discret" type="button" data-fermer>Annuler</button><button class="btn btn-danger" type="button" data-fermer>Supprimer</button></div>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var appli = document.getElementById("appli");
+  var ecran = document.getElementById("ecran");
+
+  /* ---------- Navigation (même arbre dans la barre latérale et le tiroir) ---------- */
+  var ICONES = {
+    accueil: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4v-9Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    materiel: '<path d="M4 8l8-4 8 4v8l-8 4-8-4V8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M4 8l8 4 8-4M12 12v8" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    demandes: '<path d="M7 4h10v16H7z" stroke="currentColor" stroke-width="1.7"/><path d="M10 9h4M10 13h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    agenda: '<rect x="4" y="5" width="16" height="15" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M4 10h16M9 3v4M15 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    admin: '<path d="M4 7h10M18 7h2M4 17h4M12 17h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="16" cy="7" r="2" stroke="currentColor" stroke-width="1.7"/><circle cx="10" cy="17" r="2" stroke="currentColor" stroke-width="1.7"/>',
+    puce: '<circle cx="12" cy="12" r="3" fill="currentColor"/>'
+  };
+  var NAV = [
+    { section: "Principal" },
+    { cle: "accueil", libelle: "Accueil", icone: "accueil", vue: "accueil" },
+    { cle: "materiel", libelle: "Matériel", icone: "materiel", enfants: [
+      { cle: "inventaire", libelle: "Inventaire", vue: "liste" },
+      { cle: "categories", libelle: "Catégories", vue: "bientot" },
+      { cle: "composants", libelle: "Composants (modèle)", vue: "composants" }
+    ] },
+    { cle: "demandes", libelle: "Demandes", icone: "demandes", ferme: true, enfants: [
+      { cle: "nouvelle", libelle: "Nouvelle demande", vue: "bientot" },
+      { cle: "suivi", libelle: "Suivi des demandes", vue: "bientot" }
+    ] },
+    { cle: "reservations", libelle: "Réservations", icone: "agenda", vue: "bientot" },
+    { section: "Système" },
+    { cle: "admin", libelle: "Administration", icone: "admin", ferme: true, enfants: [
+      { cle: "utilisateurs", libelle: "Utilisateurs", vue: "bientot" },
+      { cle: "parametres", libelle: "Paramètres", vue: "bientot" }
+    ] }
+  ];
+  function svg(nom, cls) { return '<svg class="ico ' + (cls || "") + '" viewBox="0 0 24 24" fill="none">' + ICONES[nom] + "</svg>"; }
+  var CHEVRON = '<svg class="chevron" viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function construireNav(el) {
+    var html = "";
+    var premiere = true;
+    NAV.forEach(function (e) {
+      if (e.section) {
+        if (!premiere) html += '<div class="trait"></div>';
+        html += '<div class="section-titre">' + e.section + "</div>";
+        premiere = false;
+        return;
+      }
+      if (e.enfants) {
+        html += '<div class="groupe ' + (e.ferme ? "ferme" : "") + '" data-groupe="' + e.cle + '">';
+        html += '<button type="button" class="entree" data-bascule>' + svg(e.icone) + "<span>" + e.libelle + "</span>" + CHEVRON + "</button>";
+        html += '<div class="sous-entrees">';
+        e.enfants.forEach(function (c) {
+          html += '<button type="button" class="sous-entree" data-cle="' + c.cle + '" data-vue-cible="' + c.vue + '" data-libelle="' + c.libelle + '">' + svg("puce") + "<span>" + c.libelle + "</span></button>";
+        });
+        html += "</div></div>";
+      } else {
+        html += '<button type="button" class="entree" data-cle="' + e.cle + '" data-vue-cible="' + e.vue + '" data-libelle="' + e.libelle + '">' + svg(e.icone) + "<span>" + e.libelle + "</span></button>";
+      }
+    });
+    el.innerHTML = html;
+  }
+  document.querySelectorAll("[data-modele-navigation]").forEach(construireNav);
+
+  /* ---------- Affichage d'un écran ---------- */
+  var CLE_PAR_VUE = { accueil: "accueil", liste: "inventaire", fiche: "inventaire", composants: "composants" };
+  function afficher(vue, cle, libelle) {
+    document.querySelectorAll("section[data-vue]").forEach(function (s) { s.classList.toggle("visible", s.dataset.vue === vue); });
+    var cleActive = cle || CLE_PAR_VUE[vue];
+    document.querySelectorAll("[data-cle]").forEach(function (b) { b.classList.toggle("active", b.dataset.cle === cleActive); });
+    document.querySelectorAll(".groupe").forEach(function (g) {
+      var contient = !!g.querySelector('[data-cle="' + cleActive + '"]');
+      g.classList.toggle("ouvert-actif", contient);
+      if (contient) g.classList.remove("ferme");
+    });
+    if (vue === "bientot") document.getElementById("titre-bientot").textContent = libelle || "Écran à venir";
+    document.getElementById("choix-ecran").value = ["accueil", "liste", "fiche", "composants"].indexOf(vue) >= 0 ? vue : "liste";
+    document.getElementById("contenu").scrollTop = 0;
+    appli.classList.remove("tiroir-ouvert");
+    if (vue === "liste") publierHauteurBarre();
+  }
+  appli.addEventListener("click", function (ev) {
+    var bascule = ev.target.closest("[data-bascule]");
+    if (bascule) { bascule.parentElement.classList.toggle("ferme"); return; }
+    var cible = ev.target.closest("[data-vue-cible]");
+    if (cible) { afficher(cible.dataset.vueCible, cible.dataset.cle, cible.dataset.libelle); return; }
+    var aller = ev.target.closest("[data-aller]");
+    if (aller) { afficher(aller.dataset.aller); return; }
+    if (ev.target.closest("[data-modale]")) { document.getElementById("modale").classList.add("ouverte"); return; }
+    if (ev.target.closest("[data-fermer]") || ev.target.id === "modale") { document.getElementById("modale").classList.remove("ouverte"); }
+  });
+  document.getElementById("choix-ecran").addEventListener("change", function (e) { afficher(e.target.value); });
+  document.getElementById("ouvrir-tiroir").addEventListener("click", function () { appli.classList.add("tiroir-ouvert"); });
+  document.getElementById("voile").addEventListener("click", function () { appli.classList.remove("tiroir-ouvert"); });
+
+  /* ---------- Format PC / mobile ---------- */
+  document.querySelectorAll("[data-format]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var mobile = b.dataset.format === "mobile";
+      ecran.classList.toggle("mobile", mobile);
+      document.querySelectorAll("[data-format]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      appli.classList.remove("tiroir-ouvert");
+      setTimeout(publierHauteurBarre, 50);
+    });
+  });
+
+  /* ---------- Barre d'outils collante : publie sa hauteur pour l'en-tête du tableau ---------- */
+  function publierHauteurBarre() {
+    var barre = document.getElementById("barre-outils");
+    if (barre && barre.offsetHeight) appli.style.setProperty("--barre-h", barre.offsetHeight + "px");
+  }
+  if (window.ResizeObserver) new ResizeObserver(publierHauteurBarre).observe(document.getElementById("barre-outils"));
+
+  /* ---------- Données fictives, tri, filtre ---------- */
+  var DONNEES = [
+    { code: "MAT-0012", nom: "Perceuse à percussion 18 V", cat: "Électroportatif", empl: "Allée B · niv. 2", qte: 6, statut: "dispo" },
+    { code: "MAT-0031", nom: "Escabeau aluminium 5 marches", cat: "Accès en hauteur", empl: "Allée A · sol", qte: 4, statut: "pret" },
+    { code: "MAT-0047", nom: "Niveau laser rotatif", cat: "Mesure", empl: "Armoire 2", qte: 2, statut: "repa" },
+    { code: "MAT-0052", nom: "Groupe électrogène 3 kVA", cat: "Énergie", empl: "Quai de chargement", qte: 1, statut: "dispo" },
+    { code: "MAT-0068", nom: "Nettoyeur haute pression 150 bars", cat: "Nettoyage", empl: "Allée C · sol", qte: 3, statut: "pret" },
+    { code: "MAT-0074", nom: "Échafaudage roulant 4 m", cat: "Accès en hauteur", empl: "Zone extérieure", qte: 2, statut: "dispo" },
+    { code: "MAT-0089", nom: "Meuleuse d'angle 125 mm", cat: "Électroportatif", empl: "Allée B · niv. 1", qte: 8, statut: "dispo" },
+    { code: "MAT-0093", nom: "Télémètre laser 50 m", cat: "Mesure", empl: "Armoire 2", qte: 5, statut: "inactif" }
+  ];
+  var STATUTS = { dispo: ["Disponible", "b-dispo"], pret: ["Prêté", "b-pret"], repa: ["En réparation", "b-repa"], inactif: ["Inactif", "b-inactif"] };
+  var etat = { tri: "nom", sens: 1, filtre: "tous", q: "" };
+  /* Initiales : les deux premiers mots « pleins » (on ignore à, de, 18 V…). */
+  function initiales(nom) {
+    var mots = nom.split(/[\s'’-]+/).filter(function (m) { return m.length > 2 && /^[A-Za-zÀ-ÿ]/.test(m); });
+    return mots.slice(0, 2).map(function (m) { return m[0]; }).join("").toUpperCase();
+  }
+  function lignesFiltrees() {
+    var q = etat.q.trim().toLowerCase();
+    return DONNEES.filter(function (d) {
+      return (etat.filtre === "tous" || d.statut === etat.filtre) &&
+        (!q || d.nom.toLowerCase().indexOf(q) >= 0 || d.code.toLowerCase().indexOf(q) >= 0);
+    }).sort(function (a, b) {
+      var va = a[etat.tri], vb = b[etat.tri];
+      var c = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb), "fr", { numeric: true, sensitivity: "base" });
+      return c * etat.sens || a.nom.localeCompare(b.nom, "fr");
+    });
+  }
+  var FLECHES = '<svg viewBox="0 0 24 24" width="10" height="7" fill="none"><path d="M6 15l6-6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><svg viewBox="0 0 24 24" width="10" height="7" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
+  function rendre() {
+    var lignes = lignesFiltrees();
+    document.getElementById("compteur").textContent = lignes.length + " élément" + (lignes.length > 1 ? "s" : "");
+    document.querySelectorAll("[data-tri]").forEach(function (t) {
+      t.classList.toggle("actif", t.dataset.tri === etat.tri);
+      t.querySelector(".chevrons").innerHTML = FLECHES;
+      t.setAttribute("aria-sort", t.dataset.tri === etat.tri ? (etat.sens > 0 ? "ascending" : "descending") : "none");
+    });
+    if (!lignes.length) {
+      var vide = '<div class="etat-vide"><b>Aucun élément ne correspond</b><span>Modifiez la recherche ou le filtre.</span></div>';
+      document.getElementById("lignes").innerHTML = vide;
+      document.getElementById("cartes").innerHTML = '<div class="carte">' + vide + "</div>";
+      return;
+    }
+    document.getElementById("lignes").innerHTML = lignes.map(function (d) {
+      var s = STATUTS[d.statut];
+      return '<div class="ligne-grille ligne-donnee" data-aller="fiche" tabindex="0">' +
+        '<div><span class="vignette">' + initiales(d.nom) + "</span></div>" +
+        '<div class="cellule-code">' + d.code + "</div>" +
+        '<div class="cellule-nom"><b>' + d.nom + "</b><small>" + d.cat + "</small></div>" +
+        "<div>" + d.empl + "</div>" +
+        '<div class="cellule-qte">' + d.qte + "</div>" +
+        '<div><span class="badge ' + s[1] + '">' + s[0] + "</span></div></div>";
+    }).join("");
+    document.getElementById("cartes").innerHTML = lignes.map(function (d) {
+      var s = STATUTS[d.statut];
+      return '<div class="carte carte-ligne" data-aller="fiche"><span class="vignette">' + initiales(d.nom) + "</span>" +
+        '<div class="carte-ligne-texte"><b>' + d.nom + "</b><small>" + d.cat + " · " + d.empl + "</small>" +
+        '<span class="refs">' + d.code + " · qté " + d.qte + "</span>" +
+        '<span><span class="badge ' + s[1] + '">' + s[0] + "</span></span></div></div>";
+    }).join("");
+  }
+  document.getElementById("entete-tableau").addEventListener("click", function (e) {
+    var t = e.target.closest("[data-tri]");
+    if (!t) return;
+    etat.sens = etat.tri === t.dataset.tri ? -etat.sens : 1;
+    etat.tri = t.dataset.tri;
+    rendre();
+  });
+  document.getElementById("tri-mobile").addEventListener("change", function (e) { etat.tri = e.target.value; etat.sens = 1; rendre(); });
+  document.getElementById("recherche").addEventListener("input", function (e) { etat.q = e.target.value; rendre(); });
+  document.querySelectorAll("[data-statut]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      etat.filtre = b.dataset.statut;
+      document.querySelectorAll("[data-statut]").forEach(function (x) { x.classList.toggle("actif", x === b); });
+      rendre();
+    });
+  });
+
+  /* ---------- Personnalisation : tout dérive des deux couleurs ---------- */
+  var DEFAUT = { primaire: "#3e4c8a", accent1: "#ff9a76", accent2: "#ff6f91" };
+  var DERIVEES = ["--primaire-fonce", "--primaire-moyen", "--primaire-doux", "--primaire-wash", "--fond", "--panneau", "--barre-laterale", "--ligne", "--ombre-carte", "--ombre-menu", "--accent-ombre"];
+  function appliquerCouleurs(p, a1, a2) {
+    var r = document.documentElement.style;
+    r.setProperty("--primaire", p);
+    r.setProperty("--accent-1", a1);
+    r.setProperty("--accent-2", a2);
+    r.setProperty("--primaire-fonce", "color-mix(in oklab, " + p + " 82%, black)");
+    r.setProperty("--primaire-moyen", "color-mix(in oklab, " + p + " 78%, white)");
+    r.setProperty("--primaire-doux", "color-mix(in oklab, " + p + " 50%, white)");
+    r.setProperty("--primaire-wash", "color-mix(in oklab, " + p + " 13%, white)");
+    r.setProperty("--fond", "color-mix(in oklab, " + p + " 8%, white)");
+    r.setProperty("--panneau", "color-mix(in oklab, " + p + " 3.5%, white)");
+    r.setProperty("--barre-laterale", "color-mix(in oklab, " + p + " 1.5%, white)");
+    r.setProperty("--ligne", "color-mix(in oklab, " + p + " 8%, white)");
+    r.setProperty("--ombre-carte", "color-mix(in srgb, " + p + " 10%, transparent)");
+    r.setProperty("--ombre-menu", "color-mix(in srgb, " + p + " 16%, transparent)");
+    r.setProperty("--accent-ombre", "color-mix(in srgb, " + a2 + " 35%, transparent)");
+    nuancier();
+  }
+  function reinitialiser() {
+    var r = document.documentElement.style;
+    ["--primaire", "--accent-1", "--accent-2"].concat(DERIVEES).forEach(function (v) { r.removeProperty(v); });
+    document.getElementById("c-primaire").value = DEFAUT.primaire;
+    document.getElementById("c-accent1").value = DEFAUT.accent1;
+    document.getElementById("c-accent2").value = DEFAUT.accent2;
+    nuancier();
+  }
+  ["c-primaire", "c-accent1", "c-accent2"].forEach(function (id) {
+    document.getElementById(id).addEventListener("input", function () {
+      appliquerCouleurs(document.getElementById("c-primaire").value, document.getElementById("c-accent1").value, document.getElementById("c-accent2").value);
+    });
+  });
+  document.getElementById("reinit").addEventListener("click", reinitialiser);
+
+  function nuancier() {
+    var cs = getComputedStyle(document.documentElement);
+    var JETONS = [["--primaire", "Principale"], ["--primaire-fonce", "Principale foncée"], ["--primaire-moyen", "Principale moyenne"], ["--primaire-doux", "Principale douce"], ["--primaire-wash", "Principale très claire"], ["--accent-1", "Accent (début)"], ["--accent-2", "Accent (fin)"], ["--succes", "Succès"], ["--fond", "Fond"], ["--panneau", "Panneau"], ["--ligne", "Lignes"], ["--encre", "Encre"], ["--encre-douce", "Encre douce"], ["--sourdine", "Sourdine"]];
+    document.getElementById("nuancier").innerHTML = JETONS.map(function (j) {
+      var v = cs.getPropertyValue(j[0]).trim();
+      return '<div class="teinte"><i style="background:var(' + j[0] + ')"></i><span>' + j[1] + "<br><code>" + j[0] + "</code><br><code>" + (v.indexOf("color-mix") === 0 ? "calculée" : v) + "</code></span></div>";
+    }).join("");
+  }
+
+  rendre();
+  nuancier();
+  /* Adresse : maquette.html#mobile&fiche (format et écran au chargement). */
+  var demande = (location.hash || "").replace("#", "").split("&");
+  if (demande.indexOf("mobile") >= 0) document.querySelector('[data-format="mobile"]').click();
+  if (demande.indexOf("tiroir") >= 0) appli.classList.add("tiroir-ouvert");
+  /* Couleurs proposées : maquette.html#c=0f766e-f59e0b-ef4444 (principale-accent début-accent fin). */
+  demande.forEach(function (p) {
+    var m = /^c=([0-9a-fA-F]{6})-([0-9a-fA-F]{6})-([0-9a-fA-F]{6})$/.exec(p);
+    if (!m) return;
+    document.getElementById("c-primaire").value = "#" + m[1];
+    document.getElementById("c-accent1").value = "#" + m[2];
+    document.getElementById("c-accent2").value = "#" + m[3];
+    appliquerCouleurs("#" + m[1], "#" + m[2], "#" + m[3]);
+  });
+  var ecranDemande = ["accueil", "liste", "fiche", "composants"].filter(function (v) { return demande.indexOf(v) >= 0; })[0];
+  afficher(ecranDemande || "liste");
+  if (demande.indexOf("tiroir") >= 0) appli.classList.add("tiroir-ouvert");
+})();
+</script>
+</body>
+</html>
