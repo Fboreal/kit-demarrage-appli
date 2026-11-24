@@ -6,8 +6,9 @@ l'intention dans ce qu'il écrit, puis **lire et suivre** le déroulé correspon
 
 | Ce que l'utilisateur dit (exemples) | Déroulé |
 |---|---|
-| « je voudrais… », « ajoute… », « crée un menu… », « il faudrait que… », « ça ne marche pas quand… » | `evolution.md` — questions, **plan validé**, branche, migration testée, contrôles, PR |
-| « c'est fusionné », « c'est mergé », « j'ai validé la PR » | `apres-fusion.md` — mise en ligne vérifiée, migration différée, ordinateur à jour, recette |
+| « je voudrais… », « ajoute… », « crée un menu… », « il faudrait que… », « ça ne marche pas quand… » | `evolution.md` — questions, **plan validé**, branche, migration testée, contrôles, PR, résumé, **accord**, fusion par Claude, mise en ligne |
+| réponse « Fusionner » à la question posée pour une PR | `evolution.md` §5 puis `apres-fusion.md` (accord : règles de `10-workflow-git.md`) |
+| « c'est fusionné », « c'est mergé » (l'utilisateur a fusionné lui-même sur GitHub) | `apres-fusion.md` — mise en ligne vérifiée, migration différée, ordinateur à jour, recette |
 | « où en est-on ? », « fais le point », retour après une pause | `faire-le-point.md` — lecture seule |
 | « vérifie la sécurité », « fais un audit » | `audit-securite.md` — constats, puis lots validés un par un |
 | « je change d'ordinateur », projet tout juste cloné | `changer-de-poste.md` |

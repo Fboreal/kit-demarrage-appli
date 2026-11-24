@@ -1,6 +1,11 @@
 # Après la fusion d'une PR
 
-**Déclencheur** : l'utilisateur dit qu'il a fusionné (« c'est fusionné », « c'est mergé », « j'ai validé la PR »…).
+**Déclencheurs** :
+- **après `node outils/pr.mjs fusionner <n>`** (cas normal) : l'outil a déjà fusionné, mis
+  l'ordinateur à jour et attendu la mise en ligne ; reprendre §2 seulement si la mise en ligne était
+  encore en cours, puis §3 à §5 ;
+- l'utilisateur dit qu'il a fusionné **lui-même** sur GitHub (« c'est fusionné », « c'est mergé ») :
+  tout le déroulé.
 
 PR concernée : celle que cite l'utilisateur, sinon la dernière PR de la branche en cours
 (`gh pr list --state all --head <branche> --limit 1`), sinon demander laquelle.
@@ -9,9 +14,9 @@ PR concernée : celle que cite l'utilisateur, sinon la dernière PR de la branch
 ```
 gh pr view <n> --json number,title,state,mergedAt,mergeCommit,headRefName,body
 ```
-- `state` ≠ `MERGED` : expliquer où cliquer (**Merge pull request** → **Confirm merge**). Si GitHub
-  indique un conflit, le résoudre dans une **nouvelle** branche (jamais en modifiant la PR ouverte :
-  la fermer et en ouvrir une autre) — garder les deux entrées d'HISTORIQUE.
+- `state` ≠ `MERGED` : la PR attend toujours. Proposer la fusion par Claude (`evolution.md` §5 :
+  vérification, résumé, accord). Conflit : le résoudre dans une **nouvelle** branche (la PR ouverte
+  reste figée : la fermer et en ouvrir une autre) — garder les deux entrées d'HISTORIQUE.
 
 ## 2. La mise en ligne
 ```
@@ -32,7 +37,7 @@ node outils/supabase.mjs migrations
 ```
 (avec l'autorisation durable notée en mémoire ; sinon demander).
 
-## 4. Mettre l'ordinateur à jour
+## 4. Mettre l'ordinateur à jour (déjà fait par `pr.mjs fusionner`)
 ```
 git switch main
 git pull --ff-only origin main

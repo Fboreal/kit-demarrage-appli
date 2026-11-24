@@ -11,7 +11,7 @@
 //        réécrit l'adresse et les deux clés du projet dans .env.local (--ref : nouvel ordinateur)
 //
 //   node outils/supabase.mjs projet                 nom, région et état du projet (en pause ?)
-//   node outils/supabase.mjs migrations             migrations du dossier : appliquées ou en attente
+//   node outils/supabase.mjs migrations [--json]    migrations du dossier : appliquées ou en attente
 //   node outils/supabase.mjs migrer --essai         exécute les migrations en attente PUIS ANNULE TOUT
 //   node outils/supabase.mjs migrer                 applique les migrations en attente, dans l'ordre
 //   node outils/supabase.mjs reglages-auth --lire
@@ -62,7 +62,7 @@ lancer(async () => {
     case "creer-projet": return creerProjet(ctx, env, o);
     case "recuperer-cles": exigerProjet(); return recupererCles(ctx, Boolean(o.essai));
     case "projet": exigerProjet(); return afficherProjet(ctx);
-    case "migrations": exigerProjet(); return listerMigrations(ctx);
+    case "migrations": exigerProjet(); return listerMigrations(ctx, Boolean(o.json));
     case "migrer": exigerProjet(); return migrer(ctx, Boolean(o.essai));
     case "reglages-auth": exigerProjet(); return reglagesAuth(ctx, o);
     default:
@@ -257,9 +257,17 @@ async function migrationsAppliquees(ctx) {
   }
 }
 
-async function listerMigrations(ctx) {
+async function listerMigrations(ctx, json = false) {
   const locales = migrationsLocales();
   const appliquees = await migrationsAppliquees(ctx);
+  if (json) {
+    // Sortie lisible par les autres outils (outils/pr.mjs).
+    console.log(JSON.stringify({
+      migrations: locales.map((m) => ({ version: m.version, nom: m.nom, fichier: m.fichier.replace(/\\/g, "/"), appliquee: appliquees.has(m.version) })),
+      inconnues: [...appliquees.keys()].filter((v) => !locales.some((m) => m.version === v)),
+    }));
+    return;
+  }
   if (!locales.length) console.log("Aucune migration dans supabase/migrations.");
   for (const m of locales) {
     console.log(`  ${appliquees.has(m.version) ? "✓ appliquée " : "… en attente"}  ${m.version}_${m.nom}`);

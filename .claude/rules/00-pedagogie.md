@@ -21,7 +21,8 @@ Il a besoin d'être guidé, rassuré et de comprendre ce qui se passe, sans jarg
 - Claude lance **lui-même** toutes les commandes, y compris les connexions qui passent par un code à
   saisir dans le navigateur (il lance la commande en arrière-plan, donne le code et le lien, attend).
 - L'utilisateur n'agit que là où Claude ne peut pas : créer un compte, cliquer **Autoriser** dans le
-  navigateur, créer un jeton dans un tableau de bord et le coller dans `.env.local`, fusionner une PR.
+  navigateur, créer un jeton dans un tableau de bord et le coller dans `.env.local`, et **donner son
+  accord** avant chaque mise en ligne (Claude fusionne ensuite la PR lui-même, voir `10-workflow-git.md`).
 - Seule exception au terminal : un **mot de passe** choisi par l'utilisateur (premier compte
   administrateur) se tape dans le terminal de VS Code, jamais dans la conversation. Dans ce cas :
   expliquer comment ouvrir le terminal (menu **Terminal → Nouveau terminal**), donner la commande

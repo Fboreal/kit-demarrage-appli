@@ -11,8 +11,8 @@ git status
 git fetch origin
 ```
 - Travail non enregistré en cours ? Le montrer et demander quoi en faire avant tout.
-- Une PR de l'utilisateur est encore ouverte ? La signaler (elle sera fusionnée avant, ou en parallèle :
-  attention au conflit d'HISTORIQUE, cf. `10-workflow-git.md`).
+- Une PR est encore ouverte (en attente d'accord) ? La signaler et proposer de la fusionner d'abord
+  (résumé + question, §5) : sinon, conflit probable sur `docs/HISTORIQUE.md`.
 
 ## 2. Comprendre le besoin
 - Reformuler le besoin en une phrase et la faire valider.
@@ -46,13 +46,21 @@ Gros sujet : découper en **lots** et ne réaliser que le lot validé.
 5. Documentation : `docs/HISTORIQUE.md` (entrée en tête, avec « Vérifié »), `CLAUDE.md` (décisions,
    avancement), et selon le cas `MODELE_DONNEES`, `PERMISSIONS`, `DESIGN`, `ROADMAP`, `INFRA`.
 
-## 5. Livrer
+## 5. Livrer, puis fusionner avec l'accord de l'utilisateur
 1. `git fetch origin` : si `main` a avancé, `git rebase origin/main`, relancer les contrôles.
 2. `git add` des fichiers concernés, contrôle anti-secret (`git diff --cached`), commit.
-3. `git push -u origin <branche>`.
-4. `gh pr create` avec le corps décrit dans `10-workflow-git.md` (Objet, Changements, Base de données,
-   Vérifié, À vérifier après la mise en ligne).
-5. Donner le lien à l'utilisateur ; lui expliquer comment regarder l'aperçu Vercel (lien posté dans la
-   PR après 1 à 2 minutes), puis fusionner (**Merge pull request** → **Confirm merge**) ; lui demander
-   de dire quand c'est fait (« c'est fusionné ») : appliquer alors `apres-fusion.md`.
-Après ouverture, **ne plus rien ajouter** à cette PR.
+3. **Preuve des contrôles** sur ce commit : `node outils/pr.mjs controler` (doit finir par « Contrôles
+   réussis »). Échec : corriger, commiter, relancer — rien n'est poussé avant.
+4. `git push -u origin <branche>`, puis `gh pr create` avec le corps décrit dans `10-workflow-git.md`
+   (Objet, Changements, Base de données, Vérifié, À vérifier après la mise en ligne).
+   Après ouverture, **ne plus rien ajouter** à cette PR.
+5. `node outils/pr.mjs verifier <n>` (attend l'aperçu Vercel, 1 à 3 minutes). Refus : l'expliquer
+   simplement et traiter la cause (conflit ou correction : nouvelle branche ; retard sur `main` :
+   rebase sans changement de contenu, contrôles, renvoi, revérification).
+6. **Résumé + question** (`10-workflow-git.md` § Fusion) : ce qui change, contrôles, base de données,
+   lien de la PR et lien d'aperçu ; « Je fusionne et je mets en ligne ? » — Fusionner et mettre en
+   ligne · Pas maintenant · Je regarde d'abord l'aperçu (dans ce cas, attendre son retour, puis reposer
+   la question).
+7. **Seulement après la réponse « Fusionner »** : `node outils/pr.mjs fusionner <n>`. L'outil fusionne,
+   attend la mise en ligne et met l'ordinateur à jour ; enchaîner `apres-fusion.md` §3 à §5
+   (migration différée, recette, bilan). « Pas maintenant » : la PR attend, sans relance insistante.

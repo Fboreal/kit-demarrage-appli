@@ -19,11 +19,13 @@ Féliciter brièvement, puis résumer en langage simple :
 - `docs/INFRA.md` : complet (dépôt, projet Supabase et région, domaine Vercel et offre, réglages
   d'authentification) — **aucune** clé.
 - `.kit/etat.json` : `termine: true` (fichier local, non versionné).
-Commit, PR, fusion par l'utilisateur, puis déroulé « après fusion ».
+Commit, preuve des contrôles, PR, vérification, résumé et **accord de l'utilisateur**, fusion par
+`node outils/pr.mjs fusionner <n>`, puis déroulé « après fusion » (même circuit qu'en E8).
 
 ## 3. La suite
 Expliquer qu'il n'y a **rien à retenir** : il suffit de demander normalement (« je voudrais… »,
-« c'est fusionné », « où en est-on ? », « vérifie la sécurité »…), puis proposer la **première vraie évolution**, adaptée à
+« où en est-on ? », « vérifie la sécurité »…) ; à la fin de chaque évolution, Claude présente un résumé
+et ne met en ligne qu'après sa réponse « Fusionner ». Puis proposer la **première vraie évolution**, adaptée à
 `infos.pour_qui` et à `docs/ROADMAP.md`, par exemple :
 - **Protéger l'accès** (connexion par e-mail et mot de passe, premier compte créé avec
   `outils/creer-admin.mjs`) — conseillé avant d'enregistrer la moindre donnée réelle ;

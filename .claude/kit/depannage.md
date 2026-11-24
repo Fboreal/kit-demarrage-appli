@@ -70,11 +70,27 @@ l'antivirus (cela réduit sa protection).
 Voir les tableaux « Problèmes fréquents » de `github.md` et `vercel.md` (identité Git non rattachée,
 déploiement bloqué, variables manquantes, conflits).
 
+## Fusion refusée (`node outils/pr.mjs`)
+Un refus n'est jamais à contourner : il protège la version en ligne. Motif affiché → remède :
+| Motif | Remède |
+|---|---|
+| aucun contrôle réussi pour le commit | `node outils/pr.mjs controler` sur la branche (dossier propre), corriger s'il échoue |
+| contrôles en échec / migration sans test | corriger, commiter, relancer `controler` — avant d'ouvrir la PR ; PR déjà ouverte : nouvelle branche |
+| aperçu Vercel absent | projet Vercel relié au dépôt ? (`node outils/vercel.mjs projet`) ; attendre 1 à 3 minutes après l'envoi |
+| aperçu Vercel en préparation | revérifier une à deux minutes plus tard |
+| vérification en échec sur GitHub (Vercel) | lire le journal (Vercel > Deployments > Build Logs) ; corriger dans une nouvelle branche |
+| conflit avec main | nouvelle branche depuis `origin/main` ; garder les deux entrées de `docs/HISTORIQUE.md` |
+| main a avancé | `git rebase origin/main` (sans changer le contenu), `controler`, `git push --force-with-lease`, `verifier` |
+| branche locale différente de la PR | commits non envoyés : les envoyer, relancer `controler` puis `verifier` |
+| migration non appliquée | l'appliquer (`node outils/supabase.mjs migrer`) si elle est compatible, ou mentionner « À APPLIQUER APRÈS DÉPLOIEMENT » dans la PR |
+| PR changée depuis le résumé / résumé de plus de 30 minutes | `verifier`, représenter le résumé, **redemander l'accord** |
+| mise en ligne échouée après la fusion | la version précédente reste en ligne ; journal Vercel, correction dans une branche `fix/…` |
+
 ## Claude Code
 | Situation | Explication | Que faire |
 |---|---|---|
 | Claude demande souvent une autorisation | chaque commande hors de la liste autorisée (`.claude/settings.json`) est soumise à l'utilisateur ; les écritures dans `.claude/` aussi | lire la commande avant d'accepter ; refuser tout ce qui est incompris |
-| Commande refusée d'office (pousser sur `main`, fusionner, lire `.env.local`…) | interdite par les réglages de sécurité du projet | c'est voulu : suivre le circuit normal (branche, PR, fusion par l'utilisateur) |
+| Commande refusée d'office (pousser sur `main`, `gh pr merge`, lire `.env.local`…) | interdite par les réglages de sécurité du projet | c'est voulu : suivre le circuit normal (branche, PR, résumé, accord, `node outils/pr.mjs fusionner`) |
 | Limite d'utilisation de Claude atteinte | quota de l'abonnement | reprendre plus tard : `/demarrer` repart de la dernière étape vérifiée |
 | Conversation très longue | Claude Code la résume automatiquement | continuer dans la **même** conversation : le fichier d'état, la mémoire et `docs/` gardent les décisions ; en cas de doute, demander à Claude de faire le point |
 | Claude ne connaît plus les préférences | nouvel ordinateur ou dossier déplacé (la mémoire est liée au chemin) | dire « je change d'ordinateur » (Claude redépose sa mémoire) |

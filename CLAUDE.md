@@ -37,8 +37,8 @@ Elles s'appliquent à **chaque** demande. Charte et mise en page : `.claude/kit/
 - `docs/PLAN_DE_TEST.md` — recette : ce qu'on vérifie sur l'application en ligne.
 - `supabase/migrations/` — schéma de la base, versionné ; `supabase/tests/` — tests SQL.
 - `outils/` — outils du kit (Node, sans dépendance) : `verifier-env`, `supabase` (migrations, réglages
-  d'authentification, création du projet), `vercel` (variables, mise en ligne), `tester-sql`,
-  `capture` (captures PC / téléphone), `creer-admin`.
+  d'authentification, création du projet), `vercel` (variables, mise en ligne), `pr` (contrôles,
+  vérification et fusion des PR), `tester-sql`, `capture` (captures PC / téléphone), `creer-admin`.
 - `.claude/kit/` — fiches de référence (GitHub, Supabase, Vercel, Next.js, captures, dépannage,
   versions) et `deroules/` (évolution, après fusion, faire le point, audit, changer d'ordinateur, tests SQL).
 
@@ -49,6 +49,9 @@ adapté s'applique (`.claude/rules/15-deroules.md`). Toujours **la même convers
 ## Décisions clés
 - Application **vierge** au départ : menus, écrans et rôles sont créés uniquement à la demande de
   l'utilisateur, une évolution à la fois.
+- **Claude fusionne les PR lui-même, uniquement après l'accord explicite de l'utilisateur** (réponse
+  « Fusionner » au résumé de cette PR) et uniquement par `node outils/pr.mjs fusionner`, qui refuse
+  toute fusion risquée (`.claude/rules/10-workflow-git.md`).
 
 ## État d'avancement
 - ⏳ Démarrage en cours (`/demarrer`).

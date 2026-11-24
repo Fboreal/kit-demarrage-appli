@@ -1,11 +1,11 @@
 ---
 name: workflow-branche-pr
-description: Chaque évolution = une branche dédiée + une PR ; jamais de commit sur main (sauf le tout premier) ; c'est l'utilisateur qui fusionne
+description: Chaque évolution = une branche dédiée + une PR ; jamais de commit sur main (sauf le tout premier) ; Claude fusionne seulement après l'accord explicite de l'utilisateur, via outils/pr.mjs
 metadata:
   type: feedback
 ---
 
-Pour chaque évolution : branche `feat/…` ou `fix/…` depuis `origin/main` frais, migration si la base change, `docs/HISTORIQUE.md` mis à jour, contrôles verts, PR. L'utilisateur relit et fusionne lui-même sur GitHub, puis le dit (« c'est fusionné »).
+Pour chaque évolution : branche `feat/…` ou `fix/…` depuis `origin/main` frais, migration testée si la base change, `docs/HISTORIQUE.md` mis à jour, preuve des contrôles (`node outils/pr.mjs controler`), PR, `node outils/pr.mjs verifier <n>`, résumé et question « Je fusionne et je mets en ligne ? », puis — seulement après la réponse « Fusionner » — `node outils/pr.mjs fusionner <n>`.
 
-**Why:** `main` part en production automatiquement (Vercel) ; la PR permet à l'utilisateur de voir et valider chaque changement, et garde un historique propre.
-**How to apply:** ne jamais pousser sur `main` ni fusionner une PR (bloqué par les réglages) ; voir [[pr-complete-avant-ouverture]], [[brancher-sur-main-a-jour]] et `.claude/rules/10-workflow-git.md`.
+**Why:** `main` part en production automatiquement (Vercel) ; l'utilisateur décide de chaque mise en ligne, et l'outil refuse toute fusion risquée (conflit, contrôles, aperçu Vercel, migration, PR modifiée depuis le résumé).
+**How to apply:** ne jamais pousser sur `main` ni lancer `gh pr merge` (interdits par les réglages) ; ne jamais contourner un refus de `pr.mjs` ; voir [[accord-avant-fusion]], [[pr-complete-avant-ouverture]], [[brancher-sur-main-a-jour]] et `.claude/rules/10-workflow-git.md`.

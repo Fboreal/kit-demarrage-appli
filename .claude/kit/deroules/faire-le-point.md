@@ -17,7 +17,9 @@ node outils/supabase.mjs migrations
 
 À présenter :
 1. **Code** : branche actuelle, travail non enregistré, retard sur la version en ligne.
-2. **Demandes de modification** ouvertes (à fusionner ? en conflit ?).
+2. **Demandes de modification** ouvertes : en attente de l'accord de l'utilisateur ? en conflit ?
+   Pour une PR en attente, proposer de la représenter (`node outils/pr.mjs verifier <n>`, résumé,
+   question) — jamais de fusion sans nouvel accord.
 3. **Mise en ligne** : statut du dernier déploiement de `main` ; l'adresse répond-elle ?
 4. **Base de données** : projet actif ou en pause ; migrations appliquées / en attente.
 5. **Démarrage** : si `.kit/etat.json` n'est pas terminé, l'étape en cours.

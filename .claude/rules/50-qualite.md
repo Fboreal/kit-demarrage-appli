@@ -6,6 +6,10 @@ npm run typecheck
 npm run lint
 npm run build
 ```
+Avant d'ouvrir la PR, sur le commit final (dossier propre) : `node outils/pr.mjs controler`. Il
+relance ces trois contrôles **et** les tests SQL des migrations de la branche (chaque migration doit
+avoir son test `supabase/tests/<même nom>.test.sql`), puis enregistre la **preuve** liée au commit :
+sans elle, la PR ne peut pas être fusionnée.
 - `typecheck` = `next typegen && tsc --noEmit` (sans la génération des types de Next, `tsc` échoue sur
   un projet neuf ou fraîchement cloné).
 - `npm run build` ne lance **pas** le lint : les trois commandes sont nécessaires.

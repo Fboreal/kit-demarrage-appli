@@ -17,11 +17,11 @@ l'utilisateur rouvre cette conversation et écrit « on continue »). Le fichier
 ```json
 {
   "format": 1,
-  "kit_version": "1.0.0",
+  "kit_version": "1.1.0",
   "termine": false,
   "etape_courante": "E0",
   "etapes": {
-    "E0": { "statut": "fait", "le": "2026-11-16T09:12:00Z", "preuve": "mémoire déposée (9 fiches)" }
+    "E0": { "statut": "fait", "le": "2026-11-16T09:12:00Z", "preuve": "mémoire déposée (10 fiches)" }
   },
   "infos": {
     "os": "windows",

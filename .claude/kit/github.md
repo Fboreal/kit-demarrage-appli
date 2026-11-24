@@ -1,8 +1,8 @@
 # GitHub — fiche de référence
 
-GitHub garde le code et son historique, et sert de lieu de validation : chaque évolution y arrive sous
-forme de **PR** (demande de modification) que l'utilisateur relit et fusionne. Vercel met en ligne ce
-qui est fusionné dans `main`.
+GitHub garde le code et son historique : chaque évolution y arrive sous forme de **PR** (demande de
+modification), que Claude fusionne **après l'accord explicite** de l'utilisateur (`outils/pr.mjs`).
+Vercel met en ligne ce qui est fusionné dans `main`.
 
 ## Compte
 - Inscription : https://github.com/signup — e-mail, mot de passe solide, nom d'utilisateur (il
@@ -84,8 +84,16 @@ exit 0
   `.claude/rules/10-workflow-git.md`).
 - Ce que l'utilisateur voit sur la PR : l'onglet **Conversation** (description, commentaire de Vercel
   avec le lien d'**aperçu** après 1 à 2 minutes), l'onglet **Files changed** (les modifications).
-- Fusion (par l'utilisateur) : **Merge pull request** → **Confirm merge**. Le bouton **Delete branch**
-  qui apparaît ensuite peut être utilisé sans risque.
+- Fusion, **par Claude après l'accord explicite de l'utilisateur** (`.claude/rules/10-workflow-git.md`
+  § Fusion) — `gh pr merge` en direct est interdit :
+  ```
+  node outils/pr.mjs controler        # avant l'ouverture : preuve des contrôles sur le commit
+  node outils/pr.mjs verifier <n>     # fusionnable ? (conflit, retard, aperçu Vercel, migrations)
+  node outils/pr.mjs fusionner <n>    # après l'accord : fusion, mise en ligne, ordinateur à jour
+  ```
+  `fusionner` utilise `gh pr merge --merge --match-head-commit <commit présenté>` : GitHub refuse si la
+  PR a bougé depuis le résumé. L'utilisateur peut aussi fusionner lui-même sur GitHub (**Merge pull
+  request** → **Confirm merge**), puis le dire.
 - Contrôle : `gh pr view <n> --json state,mergedAt,mergeCommit` → `"state": "MERGED"`.
 - Statut de mise en ligne d'un commit :
   `gh api repos/<depot>/commits/<sha>/status --jq ".statuses[] | {context, state}"` (contexte
@@ -100,3 +108,4 @@ exit 0
 | `remote origin already exists` | dépôt déjà relié | `git remote -v` : vérifier l'adresse avant toute autre action |
 | `SSL certificate problem` à l'envoi | antivirus qui intercepte (Windows) | `git config --global http.sslBackend schannel` |
 | PR « This branch has conflicts » | `main` a avancé sur les mêmes lignes | nouvelle branche depuis `origin/main` ; pour `docs/HISTORIQUE.md`, garder les deux entrées |
+| `pr.mjs` refuse la fusion | voir le motif affiché | `depannage.md` § Fusion refusée |
