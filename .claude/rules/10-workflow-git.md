@@ -28,6 +28,10 @@ production automatiquement (Vercel). On ne travaille donc **jamais** directement
    résumé présenté. Claude ne pousse jamais sur `main`.
 8. **Conflit sur `docs/HISTORIQUE.md`** (fréquent : chaque PR y ajoute une entrée en tête) : garder
    **les deux entrées**, la plus récente en premier — jamais `--ours` ni `--theirs`.
+9. **Annuler une évolution** ne réécrit jamais l'historique de `main` (ni `reset`, ni `push --force`) :
+   une branche `fix/retour-pr-<n>` annule le commit de fusion (`node outils/retour.mjs preparer <n>`,
+   qui conserve migrations appliquées et historique), puis PR et fusion sécurisée comme toute évolution
+   (`.claude/kit/deroules/retour-arriere.md`).
 
 ## Commits
 - Messages en français, courts, à l'infinitif ou au nom (« Ajouter la page d'accueil »).

@@ -7,7 +7,7 @@ guide pour créer vos comptes, écrit le code, le vérifie et met l'application 
 Votre application démarre **vierge** : vous y ajoutez ensuite, à votre rythme, les écrans et menus
 dont **vous** avez besoin — pour vous seul, pour votre équipe ou pour votre entreprise.
 
-> **Version 1.1** — prévue pour Windows 10/11 et macOS. Un blocage, une étape peu claire ? Signalez-le
+> **Version 1.2** — prévue pour Windows 10/11 et macOS. Un blocage, une étape peu claire ? Signalez-le
 > dans l'onglet **Issues** de cette page : chaque retour améliore le kit.
 
 ## Ce qu'il vous faut
@@ -63,6 +63,7 @@ Aucune commande à retenir. Écrivez à Claude ce que vous voulez, comme à un c
 |---|---|
 | « Je voudrais une page pour suivre le matériel prêté » | pose ses questions, vous soumet un plan, le réalise et le contrôle, puis vous résume la modification et vous demande : « Je fusionne et je mets en ligne ? » |
 | « Fusionner » (en réponse à cette question) | met en ligne la modification, vérifie que tout fonctionne et vous guide pour tester |
+| « Annule la dernière évolution » | analyse ce qui serait retiré et les risques pour vos données, vous propose un plan, sauvegarde et vérifie vos données avant toute suppression (qu'il ne fait qu'avec votre accord précis), puis remet en ligne la version précédente |
 | « Où en est-on ? » | fait le point complet du projet |
 | « Vérifie la sécurité » | contrôle tout et vous propose des corrections, par étapes |
 | « Je change d'ordinateur » | vous aide à tout réinstaller sur le nouveau poste |

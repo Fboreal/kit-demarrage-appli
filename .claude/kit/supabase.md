@@ -70,7 +70,27 @@ Aucun de ces outils n'affiche une clé.
 - **Mise en pause après une semaine sans activité** (e-mail d'avertissement avant) : l'application
   en ligne ne répond plus. Relance : tableau de bord → projet → **Restore project** (quelques minutes),
   puis `node outils/supabase.mjs projet`.
-- Pas de sauvegarde automatique récupérable : pour des données importantes, passer à l'offre **Pro**.
+- Pas de sauvegarde automatique récupérable (vérifié par l'API : liste vide ; planification réservée
+  aux offres payantes) : pour des données importantes, passer à l'offre **Pro**.
+- La limite des projets gratuits se constate à la création (« 2 project limit ») : mettre en pause un
+  projet inutilisé (tableau de bord, ou décision de l'utilisateur), puis recommencer.
+
+## Sauvegardes du kit (`outils/sauvegarde.mjs`)
+Avant toute suppression de données (retour arrière, ménage) :
+```
+node outils/sauvegarde.mjs creer --tables=t1,t2 --colonnes=table.colonne --motif="…"
+node outils/sauvegarde.mjs verifier .kit/sauvegardes/<date>
+node outils/sauvegarde.mjs restaurer .kit/sauvegardes/<date> --element=table   (avec accord)
+node outils/sauvegarde.mjs liste
+```
+- **Ciblée** : seulement les tables / colonnes concernées (plafond 50 000 lignes ou 20 Mo par élément).
+- **Vérifiée** : empreinte des fichiers, puis essai de restauration dans un bloc annulé, dont
+  l'empreinte doit être identique à la base actuelle (toute donnée modifiée depuis = à refaire).
+- **Restaurable** : identifiants d'origine conservés, compteurs remis à jour ; refus si la table
+  contient déjà des lignes (jamais d'écrasement).
+- **Données réelles** : dossier `.kit/sauvegardes/` sur l'ordinateur uniquement (ignoré par Git).
+- Les sauvegardes de l'offre Pro restaurent **toute** la base à une date donnée (tout ce qui a suivi
+  est perdu) : utiles en cas de catastrophe, pas pour annuler une seule évolution.
 - Quotas (taille de base, stockage, utilisateurs) : page **Usage** de l'organisation ; limites à jour
   sur https://supabase.com/pricing.
 

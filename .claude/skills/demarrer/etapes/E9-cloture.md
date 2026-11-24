@@ -25,7 +25,9 @@ Commit, preuve des contrôles, PR, vérification, résumé et **accord de l'util
 ## 3. La suite
 Expliquer qu'il n'y a **rien à retenir** : il suffit de demander normalement (« je voudrais… »,
 « où en est-on ? », « vérifie la sécurité »…) ; à la fin de chaque évolution, Claude présente un résumé
-et ne met en ligne qu'après sa réponse « Fusionner ». Puis proposer la **première vraie évolution**, adaptée à
+et ne met en ligne qu'après sa réponse « Fusionner » ; et une évolution qui déçoit peut être annulée
+(« annule la dernière évolution »), sans perte de données non autorisée. Puis proposer la **première
+vraie évolution**, adaptée à
 `infos.pour_qui` et à `docs/ROADMAP.md`, par exemple :
 - **Protéger l'accès** (connexion par e-mail et mot de passe, premier compte créé avec
   `outils/creer-admin.mjs`) — conseillé avant d'enregistrer la moindre donnée réelle ;

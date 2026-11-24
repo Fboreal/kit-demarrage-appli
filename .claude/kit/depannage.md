@@ -86,6 +86,20 @@ Un refus n'est jamais à contourner : il protège la version en ligne. Motif aff
 | PR changée depuis le résumé / résumé de plus de 30 minutes | `verifier`, représenter le résumé, **redemander l'accord** |
 | mise en ligne échouée après la fusion | la version précédente reste en ligne ; journal Vercel, correction dans une branche `fix/…` |
 
+## Retour arrière bloqué (`outils/retour.mjs`, `outils/sauvegarde.mjs`)
+Un blocage protège les données : ne jamais le contourner. Motif → remède :
+| Motif | Remède |
+|---|---|
+| l'évolution a modifié ou détruit des données | l'annulation ne peut pas les rendre : correction « vers l'avant » (nouvelle évolution), éventuellement à partir d'une ancienne sauvegarde |
+| des évolutions plus récentes en dépendent | les annuler d'abord, une à une, de la plus récente à la plus ancienne ; ou corriger « vers l'avant » |
+| annulation impossible sans conflit | même chose : rien n'a été modifié |
+| la PR n'est pas fusionnée | rien n'est en ligne : fermer la PR ; compenser une migration déjà appliquée |
+| sauvegarde « fichier altéré » | refaire la sauvegarde (`creer`), puis `verifier` |
+| sauvegarde « les données ont changé » | la refaire juste avant l'opération, puis `verifier` |
+| table au-delà du plafond de sauvegarde | « Conserver les données » au lieu de les supprimer, ou sauvegarde de l'offre Pro de Supabase |
+| `comparer` : perte non autorisée | arrêter ; prévenir l'utilisateur ; `sauvegarde.mjs restaurer` (avec son accord) |
+| `restaurer` : table absente ou non vide | la recréer vide par une migration (colonnes affichées), puis relancer ; jamais d'écrasement |
+
 ## Claude Code
 | Situation | Explication | Que faire |
 |---|---|---|

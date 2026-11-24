@@ -47,6 +47,18 @@ Aucune autre installation n'est nécessaire (pas de CLI Supabase). Une migration
 - **Interdit** : vider ou réinitialiser la base en ligne, supprimer un projet, modifier ou renuméroter
   une migration déjà appliquée (on en écrit une nouvelle, au numéro suivant).
 
+## Supprimer des données, revenir en arrière
+- Toute migration qui **supprime des données** (`drop table`, `drop column`, `delete`, `truncate`,
+  `update` qui écrase) exige, avant son application : une **sauvegarde vérifiée**
+  (`node outils/sauvegarde.mjs creer` puis `verifier` : essai de restauration réussi, identique à la
+  base) **et** l'**autorisation spécifique** de l'utilisateur, qui nomme les tables / colonnes et le
+  nombre de lignes. La validation d'un plan ou l'autorisation durable des migrations ne suffisent pas.
+- Annuler une évolution (déroulé `.claude/kit/deroules/retour-arriere.md`) : les migrations déjà
+  appliquées **restent** ; on écrit une **migration compensatoire** (numéro suivant, testée, appliquée
+  après déploiement), puis on contrôle l'intégrité (`node outils/retour.mjs instantane` / `comparer`).
+- Si l'intégrité des données ne peut pas être garantie : **ne pas continuer** ; expliquer et proposer
+  une correction « vers l'avant ».
+
 ## Après
 Mettre à jour `docs/MODELE_DONNEES.md` (tables, règles, index des migrations) et, si des droits
 changent, `docs/PERMISSIONS.md`.

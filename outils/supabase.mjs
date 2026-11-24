@@ -24,9 +24,9 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { ecrireEnv, ErreurKit, lancer, lireEnv, refProjet } from "./_env.mjs";
+import { ecrireEnv, ErreurKit, lancer } from "./_env.mjs";
+import { api, contexte, options, sql } from "./_supabase.mjs";
 
-const API = "https://api.supabase.com/v1";
 const DOSSIER_MIGRATIONS = path.join("supabase", "migrations");
 const MOTIF = /^(\d{4})_([a-z0-9_]+)\.sql$/;
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -34,28 +34,14 @@ const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 lancer(async () => {
   const [commande, ...reste] = process.argv.slice(2);
   const o = options(reste);
-  const env = lireEnv(".env.local");
-  const jeton = env.SUPABASE_ACCESS_TOKEN;
-  if (!jeton) {
-    throw new ErreurKit(
-      "SUPABASE_ACCESS_TOKEN manquant dans .env.local (Supabase > avatar > Account preferences > Access Tokens), " +
-        "ou fichier non enregistré.",
-    );
-  }
-  const ctx = { jeton, ref: refProjet(env.NEXT_PUBLIC_SUPABASE_URL) };
+  const ctx = contexte();
+  const env = ctx.env;
   // Nouvel ordinateur : .env.local encore vide, la référence vient de docs/INFRA.md.
   if (commande === "recuperer-cles" && typeof o.ref === "string") {
     if (!/^[a-z0-9]{20}$/.test(o.ref)) throw new ErreurKit("--ref : la référence du projet fait 20 lettres et chiffres.");
     ctx.ref = o.ref;
   }
-  const exigerProjet = () => {
-    if (!ctx.ref) {
-      throw new ErreurKit(
-        "Aucun projet dans .env.local (NEXT_PUBLIC_SUPABASE_URL vide ou incorrecte). " +
-          "Créez-le avec : node outils/supabase.mjs creer-projet --nom=\"…\"",
-      );
-    }
-  };
+  const exigerProjet = ctx.exigerProjet;
 
   switch (commande) {
     case "organisations": return listerOrganisations(ctx);
@@ -72,37 +58,6 @@ lancer(async () => {
       );
   }
 });
-
-function options(liste) {
-  return Object.fromEntries(
-    liste.map((a) => {
-      const i = a.indexOf("=");
-      return i < 0 ? [a.replace(/^--/, ""), true] : [a.slice(0, i).replace(/^--/, ""), a.slice(i + 1)];
-    }),
-  );
-}
-
-async function api(ctx, methode, chemin, corps) {
-  const r = await fetch(`${API}${chemin}`, {
-    method: methode,
-    headers: { Authorization: `Bearer ${ctx.jeton}`, "Content-Type": "application/json" },
-    body: corps ? JSON.stringify(corps) : undefined,
-  });
-  const texte = await r.text();
-  if (!r.ok) {
-    let message = texte;
-    try { message = JSON.parse(texte).message ?? texte; } catch { /* texte brut */ }
-    const e = new ErreurKit(`Supabase a refusé la demande (${r.status}) : ${String(message).slice(0, 500)}`);
-    e.statut = r.status;
-    throw e;
-  }
-  return texte ? JSON.parse(texte) : {};
-}
-
-/** Exécute du SQL sur la base (API Management). */
-function sql(ctx, requete) {
-  return api(ctx, "POST", `/projects/${ctx.ref}/database/query`, { query: requete });
-}
 
 // ----------------------------------------------------------------------------- création du projet
 

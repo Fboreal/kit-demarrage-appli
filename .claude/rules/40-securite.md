@@ -32,6 +32,9 @@ dès la première ligne de code ; les reprendre dans chaque plan concerné.
   réellement modifiées (`.select("id")`) avant tout effet de bord (journal, e-mail, fichier).
 - Un filtre d'affichage (sélecteur, cookie) **n'est pas** une protection : le droit est revérifié en
   base ; une demande hors droits est **refusée**, jamais corrigée en silence.
+- **Sauvegardes** (`outils/sauvegarde.mjs`, dossier `.kit/sauvegardes/`) : elles contiennent des
+  **données réelles** — sur cet ordinateur uniquement, jamais committées, envoyées, publiées ni collées
+  dans une conversation ; à supprimer quand l'utilisateur n'en a plus besoin.
 
 ## Fichiers et photos
 - Le stockage est **fermé en écriture** aux utilisateurs : le serveur dépose le fichier **après**

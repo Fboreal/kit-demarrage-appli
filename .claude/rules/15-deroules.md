@@ -9,6 +9,7 @@ l'intention dans ce qu'il écrit, puis **lire et suivre** le déroulé correspon
 | « je voudrais… », « ajoute… », « crée un menu… », « il faudrait que… », « ça ne marche pas quand… » | `evolution.md` — questions, **plan validé**, branche, migration testée, contrôles, PR, résumé, **accord**, fusion par Claude, mise en ligne |
 | réponse « Fusionner » à la question posée pour une PR | `evolution.md` §5 puis `apres-fusion.md` (accord : règles de `10-workflow-git.md`) |
 | « c'est fusionné », « c'est mergé » (l'utilisateur a fusionné lui-même sur GitHub) | `apres-fusion.md` — mise en ligne vérifiée, migration différée, ordinateur à jour, recette |
+| « annule la dernière évolution », « reviens à la version précédente », « retire … », « remets comme avant » | `retour-arriere.md` — analyse des risques, plan validé, sauvegarde vérifiée et autorisation spécifique avant toute suppression, PR d'annulation, fusion sécurisée, contrôle d'intégrité |
 | « où en est-on ? », « fais le point », retour après une pause | `faire-le-point.md` — lecture seule |
 | « vérifie la sécurité », « fais un audit » | `audit-securite.md` — constats, puis lots validés un par un |
 | « je change d'ordinateur », projet tout juste cloné | `changer-de-poste.md` |

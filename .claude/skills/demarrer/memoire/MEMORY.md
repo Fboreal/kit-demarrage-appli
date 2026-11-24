@@ -8,5 +8,6 @@
 - [PR complète avant ouverture](pr-complete-avant-ouverture.md) — une PR ouverte est figée ; toute correction = nouvelle PR
 - [Brancher sur main à jour](brancher-sur-main-a-jour.md) — la PR précédente est réputée fusionnée : fetch puis origin/main frais
 - [Migrations : méthode](migrations-methode.md) — testées en bloc annulé, appliquées avant fusion (sauf retrait de droit : après)
+- [Retour arrière](retour-arriere.md) — nouvelle PR, migration compensatoire, sauvegarde vérifiée + autorisation spécifique avant toute suppression
 - [Application vierge](application-vierge.md) — aucun menu, rôle ou multi-sites tant que l'utilisateur ne l'a pas demandé
 - [Audit par lots](audit-par-lots.md) — constats revérifiés, lots présentés et validés un par un

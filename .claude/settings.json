@@ -107,7 +107,9 @@
       "PowerShell(gh api --method *)",
       "PowerShell(git push --force-with-lease *)",
       "Bash(node outils/supabase.mjs creer-projet *)",
-      "PowerShell(node outils/supabase.mjs creer-projet *)"
+      "PowerShell(node outils/supabase.mjs creer-projet *)",
+      "Bash(node outils/sauvegarde.mjs restaurer *)",
+      "PowerShell(node outils/sauvegarde.mjs restaurer *)"
     ],
     "deny": [
       "Read(./.env)",
